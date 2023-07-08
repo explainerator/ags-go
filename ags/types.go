@@ -1,6 +1,8 @@
 package ags
 
 import (
+	"time"
+
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -18,10 +20,40 @@ type Item struct {
 	Id         string     `bson:"id,omitempty"`
 	Name       string     `bson:"name,omitempty"`
 	Codes      Codes      `bson:"codes,omitempty"`
-	Price      int32      `bson:"price,omitempty"`
+	Price      int64      `bson:"price,omitempty"`
 	ExternalId ExternalId `bson:"externalId,omitempty"`
 	Extra      bson.M     `bson:",inline"`
 	DbName     string
+}
+
+type Identifier struct {
+	Vendor   string `bson:"vendor"`
+	Location string `bson:"location"`
+	Id       string `bson:"id"`
+}
+
+type LineItem struct {
+	Id       string `bson:"id"`
+	ItemId   string `bson:"itemId"`
+	Name     string `bson:"name"`
+	Sku      string `bson:"sku"`
+	Status   string `bson:"status"`
+	Quantity int64  `bson:"quantity"`
+	Price    int64  `bson:"price"`
+	Refunded bool   `bson:"refunded"`
+	Extra    bson.M `bson:",inline"`
+}
+
+type Transaction struct {
+	Identifier Identifier `bson:"identifier"`
+	Total      int64      `bson:"total,omitempty"`
+	Subtotal   int64      `bson:"subtotal,omitempty"`
+	Status     string     `bson:"status"`
+	State      string     `bson:"state"`
+	CreatedAt  time.Time  `bson:"created_at"`
+	ModifiedAt time.Time  `bson:"modified_at"`
+	LineItems  []LineItem `bson:"line_items"`
+	Extra      bson.M     `bson:",inline"`
 }
 
 // {
